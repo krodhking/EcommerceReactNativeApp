@@ -41,7 +41,6 @@ const HomeScreen = () => {
   const [addresses, setAddresses] = useState([]);
   const [userId, setUserId] = useState("");
   const [selectedAddress,setSelectedAdress] = useState("");
-  console.log(selectedAddress)
 
   useEffect(() => {
     const fetchStoreFront = async () => {
@@ -396,6 +395,7 @@ const HomeScreen = () => {
             {addresses?.map((item, index) => (
               <Pressable
               onPress={() => setSelectedAdress(item)}
+              key={index}
                 style={{
                   width: 140,
                   height: 140,
