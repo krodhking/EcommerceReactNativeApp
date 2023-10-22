@@ -17,6 +17,8 @@ const firebaseConfig = {
   measurementId: "G-0QYK1W95TY"
 };
 
+const SELLER_ID_NAKODA_LAMINATES = "seller_id";
+
 const app = initializeApp(firebaseConfig);
 const fireStore = getFirestore(app);
 const auth = getAuth(app, {
@@ -188,9 +190,24 @@ async function getAddress(userId) {
     return data.userInfo.addresses;
 }
 
+async function fetchItemDetailsFirebase(sellerId, itemId) {
+    docSnap = await getDoc(doc(collection(fireStore, "item"), sellerId));
+    const data = docSnap.data();
+    console.log("printing item details in getItem");
+    console.log(data["itemDetails"]);
+    for(item of data["itemDetails"]) {
+        console.log(item);
+        if(item.id == itemId) {
+            console.log("returnign item")
+            return item;
+        }
+    }
+    return data.userInfo.addresses;
+}
 
 
 
 
 export {getStoreFrontData, fireBaseCreateUserWithEmailAndPassword,
-     fireBaseSignInWithEmailAndPassword, auth, addAddress, getAddress};
+     fireBaseSignInWithEmailAndPassword, auth, addAddress, getAddress,
+     SELLER_ID_NAKODA_LAMINATES, fetchItemDetailsFirebase};

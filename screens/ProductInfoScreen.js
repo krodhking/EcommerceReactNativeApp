@@ -8,21 +8,42 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
-import React ,{useState} from "react";
+
+import React ,{useState, useEffect} from "react";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/CartReducer";
+import { SELLER_ID_NAKODA_LAMINATES, fetchItemDetailsFirebase } from '../api/firebase';
 
 const ProductInfoScreen = () => {
+
   const route = useRoute();
   const { width } = Dimensions.get("window");
   const navigation = useNavigation();
   const [addedToCart, setAddedToCart] = useState(false);
   const height = (width * 100) / 100;
   const dispatch = useDispatch();
+  const [itemDetails, setItemDetails] = useState({});
+
+  
+  const fetchItemDetails = async () => {
+    try {
+      const response  = 
+      await fetchItemDetailsFirebase(SELLER_ID_NAKODA_LAMINATES, route.params.itemId);
+      console.log(response);
+      setItemDetails(response);   
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchItemDetails();
+  },[]);
+
   const addItemToCart = (item) => {
     setAddedToCart(true);
     dispatch(addToCart(item));
@@ -33,6 +54,7 @@ const ProductInfoScreen = () => {
   const cart = useSelector((state) => state.cart.cart);
   console.log(cart);
   return (
+
     <ScrollView
       style={{ marginTop: 55, flex: 1, backgroundColor: "white" }}
       showsVerticalScrollIndicator={false}
@@ -63,17 +85,17 @@ const ProductInfoScreen = () => {
             size={22}
             color="black"
           />
-          <TextInput placeholder="Search Amazon.in" />
+          <TextInput placeholder="Search nakoda.laminates.in" />
         </Pressable>
 
         <Feather name="mic" size={24} color="black" />
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {route.params.carouselImages.map((item, index) => (
+        {itemDetails?.carouselImages?.map((item, index) => (
           <ImageBackground
             style={{ width, height, marginTop: 25, resizeMode: "contain" }}
-            source={item}
+            source={{ uri: item }}
             key={index}
           >
             <View
@@ -148,11 +170,11 @@ const ProductInfoScreen = () => {
 
       <View style={{ padding: 10 }}>
         <Text style={{ fontSize: 15, fontWeight: "500" }}>
-          {route?.params?.title}
+          {itemDetails?.title}
         </Text>
 
         <Text style={{ fontSize: 18, fontWeight: "600", marginTop: 6 }}>
-          ₹{route?.params?.price}
+          ₹{itemDetails?.price}
         </Text>
       </View>
 
@@ -161,14 +183,14 @@ const ProductInfoScreen = () => {
       <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
         <Text>Color: </Text>
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-          {route?.params?.color}
+          {itemDetails?.color}
         </Text>
       </View>
 
       <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
         <Text>Size: </Text>
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-          {route?.params?.size}
+          {itemDetails?.size}
         </Text>
       </View>
 
@@ -176,7 +198,7 @@ const ProductInfoScreen = () => {
 
       <View style={{ padding: 10 }}>
         <Text style={{ fontSize: 15, fontWeight: "bold", marginVertical: 5 }}>
-          Total : ₹{route.params.price}
+          Total : ₹{itemDetails.price}
         </Text>
         <Text style={{ color: "#00CED1" }}>
           FREE delivery Tomorrow by 3 PM.Order within 10hrs 30 mins
@@ -193,7 +215,7 @@ const ProductInfoScreen = () => {
           <Ionicons name="location" size={24} color="black" />
 
           <Text style={{ fontSize: 15, fontWeight: "500" }}>
-            Deliver To Sujan - Bangalore 560019
+            Deliver To Vijay - Bangalore 560019
           </Text>
         </View>
       </View>

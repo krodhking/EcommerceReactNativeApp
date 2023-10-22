@@ -23,11 +23,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { BottomModal, SlideAnimation, ModalContent } from "react-native-modals";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserType } from "../UserContext";
-import jwt_decode from "jwt-decode";
 // Import the functions you need from the SDKs you need
-import { getStoreFrontData, getAddress } from '../api/firebase';
+import { getStoreFrontData, getAddress, SELLER_ID_NAKODA_LAMINATES } from '../api/firebase';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -44,7 +41,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     const fetchStoreFront = async () => {
-      var tempStoreFront = await getStoreFrontData("seller_id");
+      var tempStoreFront = await getStoreFrontData(SELLER_ID_NAKODA_LAMINATES);
       setStoreFront(tempStoreFront)
       var tempItems = [];
       var tempSubCategories = Object.keys(tempStoreFront.subCategoryToItemsMap)
@@ -78,15 +75,6 @@ const HomeScreen = () => {
       fetchAddresses();
     }
   },[]);
-  
-
-  
-  
-  
-  
-  
-  
-  
   
   return (
     <>

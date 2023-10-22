@@ -8,12 +8,8 @@ import {
   Alert,
 } from "react-native";
 import React, { useEffect, useState,useContext } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwt_decode from "jwt-decode"
-import { UserType } from "../UserContext";
-import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {addAddress} from '../api/firebase';
 
 
